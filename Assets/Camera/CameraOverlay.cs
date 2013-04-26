@@ -10,7 +10,7 @@ public class CameraOverlay: MonoBehaviour
 	public void Start()
 	{
 		cameraOverlay = GameObject.Find ("cameraOverlay");
-		cameraOverlay.active = false;
+		cameraOverlay.SetActive(false);
 	}
 	
 	public void OnEnable ()
@@ -24,7 +24,7 @@ public class CameraOverlay: MonoBehaviour
 	{
 		if(Input.GetKeyDown (KeyCode.C))
 		{
-			cameraOverlay.active = !cameraOverlay.active;
+			cameraOverlay.SetActive(!cameraOverlay.activeSelf);
 		}
 	}
 }
