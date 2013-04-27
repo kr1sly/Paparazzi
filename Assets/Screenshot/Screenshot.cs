@@ -21,6 +21,7 @@ public class Screenshot : MonoBehaviour
 	
 	void Start()
 	{
+		Screen.showCursor = false;
 		cameraOverlay = GameObject.Find ("cameraOverlay");
 		promis = new ArrayList();
 		promis.Add (GameObject.Find ("Superman"));

@@ -1,0 +1,54 @@
+Initialize engine version: 4.1.2f1 (911c7369eeac)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 9.0c [nvd3dumx.dll 9.18.13.1407]
+    Renderer: NVIDIA GeForce GTX 460
+    Vendor:   NVIDIA
+    VRAM:     978 MB (via DXGI)
+    Caps:     Shader=30 DepthRT=1 NativeDepth=1 NativeShadow=1 DF16=0 DF24=0 INTZ=1 RAWZ=0 NULL=1 RESZ=0 SlowINTZ=0
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\Users\Chrissly\Documents\Paparazzi\Paparazzi_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\Chrissly\Documents\Paparazzi\Paparazzi_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\Chrissly\Documents\Paparazzi\Paparazzi_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
+Loading C:\Users\Chrissly\Documents\Paparazzi\Paparazzi_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
+Platform assembly: C:\Users\Chrissly\Documents\Paparazzi\Paparazzi_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\Chrissly\Documents\Paparazzi\Paparazzi_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\Chrissly\Documents\Paparazzi\Paparazzi_Data\Managed\Assembly-UnityScript-firstpass.dll (this message is harmless)
+Loading C:\Users\Chrissly\Documents\Paparazzi\Paparazzi_Data\Managed\Assembly-UnityScript-firstpass.dll into Unity Child Domain
+- Completed reload, in  0.038 seconds
+desktop: 1680x1050 59Hz; virtual: 3522x1050 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1606)
+
+[mecanim]: BindSkeleton: cannot find Transform 'Gloves'
+ 
+(Filename:  Line: 1441)
+
+[mecanim]: BindSkeleton: cannot find Transform 'Skull:Box001_0_0'
+ 
+(Filename:  Line: 1441)
+
+[mecanim]: BindSkeleton: cannot find Transform 'Camera01.T.target'
+ 
+(Filename:  Line: 1441)
+
+[mecanim]: BindSkeleton: cannot find Transform 'Camera01'
+ 
+(Filename:  Line: 1441)
+
+[mecanim]: BindSkeleton: cannot find Transform 'Camera01.t.target'
+ 
+(Filename:  Line: 1441)
+
+[mecanim]: BindSkeleton: cannot find Transform 'Camera02'
+ 
+(Filename:  Line: 1441)
+
+[mecanim]: BindSkeleton: cannot find Transform 'Camera02.t.target'
+ 
+(Filename:  Line: 1441)
+
+Platform assembly: C:\Users\Chrissly\Documents\Paparazzi\Paparazzi_Data\Managed\Boo.Lang.dll (this message is harmless)
