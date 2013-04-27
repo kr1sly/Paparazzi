@@ -38,13 +38,15 @@ public class Screenshot : MonoBehaviour
     {
 		if(cameraOverlay == null)
 		{
-			cameraOverlay = GameObject.Find ("cameraOverlay");
+		cameraOverlay = GameObject.Find ("cameraOverlay");
 		}
+		cameraOverlay.SetActive (true);
 		//Debug.Log (cameraOverlay.name);
         if (Input.GetKeyDown("k") && cameraOverlay.activeSelf)
 		{
+			
 			audio.Play ();
-			//cameraOverlay.SetActive (false);
+			cameraOverlay.SetActive (false);
             int i = 0;
 			int rem = -1;
 			foreach(GameObject promi in promis)
@@ -95,12 +97,15 @@ public class Screenshot : MonoBehaviour
         yield return new WaitForEndOfFrame();
  		
         // create a texture to pass to encoding
-        Texture2D texture = new Texture2D(512, 418, TextureFormat.RGB24, false);
- 
+        //Texture2D texture = new Texture2D(512, 418, TextureFormat.RGB24, false);
+		//Debug.Log ("width: "+Screen.width/2+", height: "+(Screen.height/2));
+		Texture2D texture = new Texture2D(Screen.width/2, (int)(Screen.height/1.5), TextureFormat.RGB24, false);
+ 		//Texture2D texture = new Texture2D((int)Mathf.Round ((float)(Screen.width/2)), (int)Mathf.Round ((float)(Screen.height/1.837)), TextureFormat.RGB24, false);
         // put buffer into texture
 		
-        texture.ReadPixels(new Rect(460, 170, 512, 418), 0, 0);
-		//cameraOverlay.SetActive (true);
+        //texture.ReadPixels(new Rect(460, 170, 512, 418), 0, 0);
+		texture.ReadPixels (new Rect((Screen.width/4), Screen.height/4, Screen.width/2, (int)(Screen.height/1.5)), 0,0);
+		//texture.ReadPixels(new Rect((int)Mathf.Round ((float)(Screen.width/2.226)), (int)Mathf.Round ((float)(Screen.height/4.517)), (int)Mathf.Round ((float)(Screen.width/2)), (int)Mathf.Round ((float)(Screen.height/1.837))), 0, 0);
         texture.Apply();
  		
         // split the process up--ReadPixels() and the GetPixels() call inside of the encoder are both pretty heavy
@@ -124,7 +129,7 @@ public class Screenshot : MonoBehaviour
         	count++;
 			DestroyObject( texture );
 		}
- 
+ 		cameraOverlay.SetActive (true);
         // Added by Karl. - Tell unity to delete the texture, by default it seems to keep hold of it and memory crashes will occur after too many screenshots.
         //DestroyObject( texture );
  
