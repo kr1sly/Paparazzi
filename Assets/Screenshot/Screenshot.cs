@@ -36,6 +36,11 @@ public class Screenshot : MonoBehaviour
 	}
     void Update()
     {
+		if(cameraOverlay == null)
+		{
+			cameraOverlay = GameObject.Find ("cameraOverlay");
+		}
+		//Debug.Log (cameraOverlay.name);
         if (Input.GetKeyDown("k") && cameraOverlay.activeSelf)
 		{
 			audio.Play ();
