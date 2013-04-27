@@ -53,7 +53,7 @@ public class Screenshot : MonoBehaviour
 				if(promi.renderer.isVisible)
 				{
 					float distance = Vector3.Distance(promi.transform.position, gameObject.transform.position);
-	    			if(distance <= 10.0f)
+	    			if(distance <= 15.0f)
 					{
 						StartCoroutine(ScreenshotEncode(promi));
 						rem = i;
