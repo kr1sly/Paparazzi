@@ -27,6 +27,10 @@ public class Screenshot : MonoBehaviour
 		promis.Add (GameObject.Find ("Robin"));
 		promis.Add (GameObject.Find ("Batman"));
 		promis.Add (GameObject.Find ("Rikku"));
+		promis.Add (GameObject.Find ("Altair"));
+		promis.Add (GameObject.Find ("Harry"));
+		promis.Add (GameObject.Find ("Gordon"));
+		promis.Add (GameObject.Find ("Clown"));
 		textures = new ArrayList();
 		found = new ArrayList();
 		
