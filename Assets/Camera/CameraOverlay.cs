@@ -8,6 +8,7 @@ public class CameraOverlay: MonoBehaviour
 	private GameObject cameraOverlay;
 	private GameObject intro1;
 	private GameObject intro2;
+	public AudioSource soundtrack;
 	
 	public void Start()
 	{
@@ -28,16 +29,24 @@ public class CameraOverlay: MonoBehaviour
 	
 	public void Update()
 	{
-		if (Time.frameCount <= 100)
+		if (Time.frameCount <= 150)
 		{
+			if(!soundtrack.isPlaying)
+			{
+				soundtrack.Play ();
+			}
 			intro1.SetActive (true);
 		}
-		else if (Time.frameCount <= 200)
+		else if (Time.frameCount <= 300)
 		{
 			intro1.SetActive (false);
 			intro2.SetActive (true);
 		}
-		else intro2.SetActive (false);
+		else 
+		{
+			intro2.SetActive (false);
+			
+		}
 		if(Input.GetKeyDown (KeyCode.C))
 		{
 			cameraOverlay.SetActive(!cameraOverlay.activeSelf);

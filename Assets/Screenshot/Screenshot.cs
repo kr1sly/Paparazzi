@@ -18,6 +18,9 @@ public class Screenshot : MonoBehaviour
 	private ArrayList textures;
 	private ArrayList found;
 	private GUIStyle TextStyle = new GUIStyle();
+	private GUIStyle DescrTextStyle = new GUIStyle();
+	private Hashtable promiTable = new Hashtable();
+	private string[] names = {"Altair", "Batman", "Clown", "Gordon", "Harry", "Rikku", "Robin", "Superman"};
 	
 	void Start()
 	{
@@ -37,7 +40,12 @@ public class Screenshot : MonoBehaviour
 		
 		TextStyle.normal.textColor = Color.red;
 		TextStyle.fontStyle = FontStyle.Bold;
-		TextStyle.fontSize = 25;
+		TextStyle.fontSize = 18;
+		TextStyle.alignment = TextAnchor.MiddleCenter;
+		DescrTextStyle.normal.textColor = Color.white;
+		DescrTextStyle.fontStyle = FontStyle.Normal;
+		DescrTextStyle.fontSize = 18;
+		DescrTextStyle.alignment = TextAnchor.MiddleCenter;
 	}
     void Update()
     {
@@ -83,16 +91,56 @@ public class Screenshot : MonoBehaviour
 	
 	void OnGUI()
 	{
-		int offset = 0;
+		/*int offset = 0;
 		int cnt = 0;
 		GUI.Label (new Rect (Screen.width/2, 20, 50, 20), ""+found.Count+"/"+(found.Count+promis.Count)+"", TextStyle);
+		GUI.Label (new Rect (50, Screen.height-40, 50, 20), "find Altair, Batman, Gordon Freeman, Harry Potter, Ludwig The Clown, Rikku, Robin and Superman", DescrTextStyle);
 		foreach (Texture t in textures)
 		{
 			GUI.Label (new Rect (10, 10+offset, 100, 100), (Texture)t);
 			GUI.Label (new Rect (120, 30+offset, 100, 40), found[cnt] as string, TextStyle);
 			offset += 100;
 			cnt++;
+		}*/
+		int offset = 0;
+		int cnt = 0;
+		if (promis.Count > 0)
+			GUI.Label (new Rect (Screen.width/2, 20, 50, 20), ""+promiTable.Count+"/"+(promiTable.Count+promis.Count)+"", TextStyle);
+		else GUI.Label (new Rect (Screen.width/2, 20, 50, 20), ""+promiTable.Count+"/"+(promiTable.Count+promis.Count)+"", DescrTextStyle);
+		//GUI.Label (new Rect (50, Screen.height-40, 50, 20), "find Altair, Batman, Gordon Freeman, Harry Potter, Ludwig The Clown, Rikku, Robin and Superman", DescrTextStyle);
+		foreach (string s in names)
+		{
+			if(cnt <= 3)
+			{
+				if(promiTable.ContainsKey (s))
+				{
+					GUI.Label (new Rect (600+offset, 10, 80, 80), (Texture)promiTable[s]);
+					GUI.Label (new Rect (600+offset, 100, 80, 20), s, DescrTextStyle);
+				}
+				else GUI.Label (new Rect (600+offset, 100, 80, 20), s, TextStyle);
+				offset += 100;
+			}
+			else 
+			{
+				if(cnt == 4) offset = 0;
+				
+				if(promiTable.ContainsKey (s))
+				{
+					GUI.Label (new Rect (20+offset, Screen.height-130, 80, 80), (Texture)promiTable[s]);
+					GUI.Label (new Rect (20+offset, Screen.height-40, 80, 20), s, DescrTextStyle);
+				}
+				else GUI.Label (new Rect (20+offset, Screen.height-40, 80, 20), s, TextStyle);
+				offset += 100;
+			}
+			cnt++;
 		}
+		/*foreach (Texture t in textures)
+		{
+			GUI.Label (new Rect (10, 10+offset, 100, 100), (Texture)t);
+			GUI.Label (new Rect (120, 30+offset, 100, 40), found[cnt] as string, TextStyle);
+			offset += 100;
+			cnt++;
+		}*/
 	}
  
     IEnumerator ScreenshotEncode(GameObject prom)
@@ -125,7 +173,8 @@ public class Screenshot : MonoBehaviour
         	promCount++;
 			//texture.Resize (100,100);
 			texture.Compress (false);
-			textures.Add (texture);
+			//textures.Add (texture);
+			promiTable.Add (prom.name, texture);
 			found.Add (prom.name);
 		}
 		else
