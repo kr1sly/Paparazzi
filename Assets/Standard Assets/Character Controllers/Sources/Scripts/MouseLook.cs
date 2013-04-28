@@ -29,13 +29,48 @@ public class MouseLook : MonoBehaviour {
 	public float maximumY = 60F;
 
 	float rotationY = 0F;
+	bool tr = true;
+	
+	private GameObject cameraOverlay; //edit
 
 	void Update ()
 	{
+		// edit start
+		if(cameraOverlay == null)
+		{
+			cameraOverlay = GameObject.Find ("cameraOverlay");
+			tr = true;
+		} 
+		
+		if(cameraOverlay != null)
+		{
+	        if (cameraOverlay.activeSelf)
+			{
+				sensitivityX = 15F + Random.Range(10F, 20F);
+				sensitivityY = 15F + Random.Range(10F, 20F);
+				//float minMove = Random.Range (-4F, 4F);
+				float maxMove = Random.Range (-7F, 7F);
+				//rigidbody.transform.Rotate(Mathf.Lerp(minMove, maxMove, Time.time), Mathf.Lerp(minMove, maxMove, Time.time), 0);
+				if(tr)
+				{
+					//transform.Rotate(Mathf.Lerp(minMove, maxMove, Time.time), 0, 0);
+					transform.Rotate( 0, maxMove, 0);
+					tr = false;
+				}
+			}
+			else
+			{
+				tr = true;
+				sensitivityX = 15F;
+				sensitivityY = 15F;
+			}
+		} 
+		// end
+		
 		if (axes == RotationAxes.MouseXAndY)
 		{
 			float rotationX = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * sensitivityX;
-			
+
 			rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
 			rotationY = Mathf.Clamp (rotationY, minimumY, maximumY);
 			
@@ -59,5 +94,7 @@ public class MouseLook : MonoBehaviour {
 		// Make the rigid body not change rotation
 		if (rigidbody)
 			rigidbody.freezeRotation = true;
+		
+		cameraOverlay = GameObject.Find ("cameraOverlay");
 	}
 }

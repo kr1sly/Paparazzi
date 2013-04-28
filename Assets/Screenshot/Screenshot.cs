@@ -13,19 +13,25 @@ public class Screenshot : MonoBehaviour
 {
     private int count = 0;
 	private int promCount = 0;
+	private float clickCount = 1.0f;
  	private GameObject cameraOverlay;
 	private ArrayList promis;
 	private ArrayList textures;
 	private ArrayList found;
+	public bool stabilized = false;
 	private GUIStyle TextStyle = new GUIStyle();
 	private GUIStyle DescrTextStyle = new GUIStyle();
+	private CharacterMotor characterMotor;
 	private Hashtable promiTable = new Hashtable();
+	public string infoText = "";
+	private bool mouseRelease = true;
 	private string[] names = {"Altair", "Batman", "Clown", "Gordon", "Harry", "Rikku", "Robin", "Superman"};
 	
 	void Start()
 	{
 		Screen.showCursor = false;
 		cameraOverlay = GameObject.Find ("cameraOverlay");
+		characterMotor = GameObject.Find ("First Person Controller").GetComponent<CharacterMotor>();
 		promis = new ArrayList();
 		promis.Add (GameObject.Find ("Superman"));
 		promis.Add (GameObject.Find ("Robin"));
@@ -51,12 +57,38 @@ public class Screenshot : MonoBehaviour
     {
 		if(cameraOverlay == null)
 		{
-		cameraOverlay = GameObject.Find ("cameraOverlay");
-		}
-		//Debug.Log (cameraOverlay.name);
-        if (Input.GetKeyDown("k") && cameraOverlay.activeSelf)
-		{
+			cameraOverlay = GameObject.Find ("cameraOverlay");
 			
+		}
+		else if (cameraOverlay.activeSelf && stabilized && (characterMotor.inputMoveDirection == Vector3.zero) && Input.GetButton ("Fire1") && clickCount >= 0.0f && mouseRelease)
+		{
+			infoText = "Say Cheese.. "+clickCount.ToString("F2");
+			clickCount -= 0.01f;
+		}
+		else if (cameraOverlay.activeSelf && (characterMotor.inputMoveDirection != Vector3.zero) && Input.GetButton ("Fire1"))
+		{
+			infoText = "Stand still!";
+		}
+		else if (cameraOverlay.activeSelf && (characterMotor.inputMoveDirection == Vector3.zero) && Input.GetButton ("Fire1") && !stabilized)
+		{
+			infoText = "Stabilize ('H') first!";
+		}
+		else if(!Input.GetButton ("Fire1")) 
+		{
+			mouseRelease = true;
+			if(!stabilized) infoText = "";
+			clickCount = 1.0f;
+		}
+		else if(!cameraOverlay.activeSelf && Input.GetButton ("Fire1"))
+		{
+			clickCount = 1.0f;
+			infoText = "Take out the cam ('C')!";
+		}
+			
+		//Debug.Log (cameraOverlay.name);
+        if (clickCount <= 0.0f && cameraOverlay.activeSelf)
+		{
+			clickCount = 1.0f;
 			audio.Play ();
 			//cameraOverlay.SetActive (false);
             int i = 0;
@@ -82,10 +114,13 @@ public class Screenshot : MonoBehaviour
 			
 			if(rem != -1)
 			{
+				infoText = "Nice picture!";
 				promis.RemoveAt(rem);
 			}
-			//else if (promis.Count == 0) cameraOverlay.SetActive (true);
+			else infoText = "Nothing to look at..";
 			
+			mouseRelease = false;
+			//else if (promis.Count == 0) cameraOverlay.SetActive (true);
 		}
     }
 	
@@ -102,45 +137,52 @@ public class Screenshot : MonoBehaviour
 			offset += 100;
 			cnt++;
 		}*/
-		int offset = 0;
-		int cnt = 0;
-		if (promis.Count > 0)
-			GUI.Label (new Rect (Screen.width/2, 20, 50, 20), ""+promiTable.Count+"/"+(promiTable.Count+promis.Count)+"", TextStyle);
-		else GUI.Label (new Rect (Screen.width/2, 20, 50, 20), ""+promiTable.Count+"/"+(promiTable.Count+promis.Count)+"", DescrTextStyle);
-		//GUI.Label (new Rect (50, Screen.height-40, 50, 20), "find Altair, Batman, Gordon Freeman, Harry Potter, Ludwig The Clown, Rikku, Robin and Superman", DescrTextStyle);
-		foreach (string s in names)
+		
+		if(Time.frameCount >= 300)
 		{
-			if(cnt <= 3)
+		
+			GUI.Label (new Rect (Screen.width/2, 40, 50, 20), infoText, TextStyle);
+			
+			int offset = 0;
+			int cnt = 0;
+			if (promis.Count > 0)
+				GUI.Label (new Rect (Screen.width/2, 20, 50, 20), ""+promiTable.Count+"/"+(promiTable.Count+promis.Count)+"", TextStyle);
+			else GUI.Label (new Rect (Screen.width/2, 20, 50, 20), ""+promiTable.Count+"/"+(promiTable.Count+promis.Count)+"", DescrTextStyle);
+			//GUI.Label (new Rect (50, Screen.height-40, 50, 20), "find Altair, Batman, Gordon Freeman, Harry Potter, Ludwig The Clown, Rikku, Robin and Superman", DescrTextStyle);
+			foreach (string s in names)
 			{
-				if(promiTable.ContainsKey (s))
+				if(cnt <= 3)
 				{
-					GUI.Label (new Rect (600+offset, 10, 80, 80), (Texture)promiTable[s]);
-					GUI.Label (new Rect (600+offset, 100, 80, 20), s, DescrTextStyle);
+					if(promiTable.ContainsKey (s))
+					{
+						GUI.Label (new Rect (600+offset, 10, 80, 80), (Texture)promiTable[s]);
+						GUI.Label (new Rect (600+offset, 100, 80, 20), s, DescrTextStyle);
+					}
+					else GUI.Label (new Rect (600+offset, 100, 80, 20), s, TextStyle);
+					offset += 100;
 				}
-				else GUI.Label (new Rect (600+offset, 100, 80, 20), s, TextStyle);
-				offset += 100;
+				else 
+				{
+					if(cnt == 4) offset = 0;
+					
+					if(promiTable.ContainsKey (s))
+					{
+						GUI.Label (new Rect (20+offset, Screen.height-130, 80, 80), (Texture)promiTable[s]);
+						GUI.Label (new Rect (20+offset, Screen.height-40, 80, 20), s, DescrTextStyle);
+					}
+					else GUI.Label (new Rect (20+offset, Screen.height-40, 80, 20), s, TextStyle);
+					offset += 100;
+				}
+				cnt++;
 			}
-			else 
+			/*foreach (Texture t in textures)
 			{
-				if(cnt == 4) offset = 0;
-				
-				if(promiTable.ContainsKey (s))
-				{
-					GUI.Label (new Rect (20+offset, Screen.height-130, 80, 80), (Texture)promiTable[s]);
-					GUI.Label (new Rect (20+offset, Screen.height-40, 80, 20), s, DescrTextStyle);
-				}
-				else GUI.Label (new Rect (20+offset, Screen.height-40, 80, 20), s, TextStyle);
+				GUI.Label (new Rect (10, 10+offset, 100, 100), (Texture)t);
+				GUI.Label (new Rect (120, 30+offset, 100, 40), found[cnt] as string, TextStyle);
 				offset += 100;
-			}
-			cnt++;
+				cnt++;
+			}*/
 		}
-		/*foreach (Texture t in textures)
-		{
-			GUI.Label (new Rect (10, 10+offset, 100, 100), (Texture)t);
-			GUI.Label (new Rect (120, 30+offset, 100, 40), found[cnt] as string, TextStyle);
-			offset += 100;
-			cnt++;
-		}*/
 	}
  
     IEnumerator ScreenshotEncode(GameObject prom)
