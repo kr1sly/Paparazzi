@@ -18,12 +18,18 @@ public class Screenshot : MonoBehaviour
 	private ArrayList promis;
 	private ArrayList textures;
 	private ArrayList found;
+	private GameObject finishScreen;
 	public bool stabilized = false;
 	private GUIStyle TextStyle = new GUIStyle();
 	private GUIStyle DescrTextStyle = new GUIStyle();
 	private CharacterMotor characterMotor;
 	private Hashtable promiTable = new Hashtable();
+	private Hashtable newsTable = new Hashtable();
+	private bool newsPaper = false;
+	private GameObject currNewsPaper;
+	private Texture currTexture;
 	public string infoText = "";
+	private int currTime;
 	private bool mouseRelease = true;
 	private string[] names = {"Altair", "Batman", "Clown", "Gordon", "Harry", "Rikku", "Robin", "Superman"};
 	
@@ -31,7 +37,10 @@ public class Screenshot : MonoBehaviour
 	{
 		Screen.showCursor = false;
 		cameraOverlay = GameObject.Find ("cameraOverlay");
+		finishScreen = GameObject.Find ("finishScreen");
+		finishScreen.SetActive(false);
 		characterMotor = GameObject.Find ("First Person Controller").GetComponent<CharacterMotor>();
+		//currNewsPaper.SetActive(false);
 		promis = new ArrayList();
 		promis.Add (GameObject.Find ("Superman"));
 		promis.Add (GameObject.Find ("Robin"));
@@ -44,6 +53,25 @@ public class Screenshot : MonoBehaviour
 		textures = new ArrayList();
 		found = new ArrayList();
 		
+		
+		newsTable.Add ("Altair", GameObject.Find ("Altair_news"));
+		newsTable.Add ("Batman", GameObject.Find ("Batman_news"));
+		newsTable.Add ("Clown", GameObject.Find ("Clown_news"));
+		newsTable.Add ("Gordon", GameObject.Find ("Gordon_news"));
+		newsTable.Add ("Harry", GameObject.Find ("Harry_news"));
+		newsTable.Add ("Rikku", GameObject.Find ("Rikku_news"));
+		newsTable.Add ("Robin", GameObject.Find ("Robin_news"));
+		newsTable.Add ("Superman", GameObject.Find ("Superman_news"));
+		
+		
+		
+		
+		
+		foreach (DictionaryEntry pair in newsTable)
+        {
+			Debug.Log(pair.Key);
+			 (pair.Value as GameObject).SetActive(false);
+        }
 		TextStyle.normal.textColor = Color.red;
 		TextStyle.fontStyle = FontStyle.Bold;
 		TextStyle.fontSize = 18;
@@ -138,16 +166,25 @@ public class Screenshot : MonoBehaviour
 			cnt++;
 		}*/
 		
-		if(Time.frameCount >= 300)
+		if(Time.frameCount >= 300 && !newsPaper)
 		{
-		
-			GUI.Label (new Rect (Screen.width/2, 40, 50, 20), infoText, TextStyle);
+			if(currNewsPaper != null)
+			{
+				currNewsPaper.SetActive(false);
+			}
+			GUI.Label (new Rect (Screen.width/2-100, 40, 50, 20), infoText, TextStyle);
 			
 			int offset = 0;
 			int cnt = 0;
 			if (promis.Count > 0)
-				GUI.Label (new Rect (Screen.width/2, 20, 50, 20), ""+promiTable.Count+"/"+(promiTable.Count+promis.Count)+"", TextStyle);
-			else GUI.Label (new Rect (Screen.width/2, 20, 50, 20), ""+promiTable.Count+"/"+(promiTable.Count+promis.Count)+"", DescrTextStyle);
+				GUI.Label (new Rect (Screen.width/2-100, 20, 50, 20), ""+promiTable.Count+"/"+(promiTable.Count+promis.Count)+"", TextStyle);
+			else 
+			{
+				GUI.Label (new Rect (Screen.width/2-100, 20, 50, 20), ""+promiTable.Count+"/"+(promiTable.Count+promis.Count)+"", DescrTextStyle);
+				cameraOverlay.SetActive (false);
+				if(!newsPaper)
+					finishScreen.SetActive (true);
+			}
 			//GUI.Label (new Rect (50, Screen.height-40, 50, 20), "find Altair, Batman, Gordon Freeman, Harry Potter, Ludwig The Clown, Rikku, Robin and Superman", DescrTextStyle);
 			foreach (string s in names)
 			{
@@ -182,6 +219,15 @@ public class Screenshot : MonoBehaviour
 				offset += 100;
 				cnt++;
 			}*/
+		}
+		else if (Time.frameCount >= 300)
+		{
+			if(Time.frameCount > currTime+200) 
+			{
+				newsPaper = false;
+			}
+			else if(cameraOverlay.activeSelf) cameraOverlay.SetActive(false);
+			GUI.Label (new Rect(170, 370, 280, 188), (Texture)currTexture);
 		}
 	}
  
@@ -218,6 +264,12 @@ public class Screenshot : MonoBehaviour
 			//textures.Add (texture);
 			promiTable.Add (prom.name, texture);
 			found.Add (prom.name);
+			currNewsPaper = (GameObject)newsTable[prom.name];
+			currNewsPaper.SetActive(true);
+			currTexture = texture;
+			Debug.Log (prom.name + "_news");
+			newsPaper = true;
+			currTime = Time.frameCount;
 		}
 		else
 		{
