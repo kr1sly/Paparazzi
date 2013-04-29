@@ -29,7 +29,7 @@ public class Screenshot : MonoBehaviour
 	private GameObject currNewsPaper;
 	private Texture currTexture;
 	public string infoText = "";
-	private int currTime;
+	private float currTime;
 	private bool mouseRelease = true;
 	private string[] names = {"Altair", "Batman", "Clown", "Gordon", "Harry", "Rikku", "Robin", "Superman"};
 	
@@ -166,7 +166,7 @@ public class Screenshot : MonoBehaviour
 			cnt++;
 		}*/
 		
-		if(Time.frameCount >= 300 && !newsPaper)
+		if(Time.time >= 10 && !newsPaper)
 		{
 			if(currNewsPaper != null)
 			{
@@ -220,9 +220,10 @@ public class Screenshot : MonoBehaviour
 				cnt++;
 			}*/
 		}
-		else if (Time.frameCount >= 300)
+		else if (Time.time >= 10)
 		{
-			if(Time.frameCount > currTime+200) 
+			//if(Time.frameCount > currTime+200) 
+			if(Time.time > currTime+3)
 			{
 				newsPaper = false;
 			}
@@ -269,7 +270,8 @@ public class Screenshot : MonoBehaviour
 			currTexture = texture;
 			Debug.Log (prom.name + "_news");
 			newsPaper = true;
-			currTime = Time.frameCount;
+			//currTime = Time.frameCount;
+			currTime = Time.time;
 		}
 		else
 		{

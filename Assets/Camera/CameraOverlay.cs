@@ -29,7 +29,7 @@ public class CameraOverlay: MonoBehaviour
 	
 	public void Update()
 	{
-		if (Time.frameCount <= 150)
+		if (Time.time <= 5)
 		{
 			if(!soundtrack.isPlaying)
 			{
@@ -37,7 +37,7 @@ public class CameraOverlay: MonoBehaviour
 			}
 			intro1.SetActive (true);
 		}
-		else if (Time.frameCount <= 300)
+		else if (Time.time <= 10)
 		{
 			intro1.SetActive (false);
 			intro2.SetActive (true);
